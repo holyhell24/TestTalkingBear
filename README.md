@@ -1,50 +1,14 @@
-# Welcome to your Expo app 👋
+# Talking Bear
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Rive Object
 
-## Get started
+- I used `rive-react-native` as main library to work with Rive object and it's animations
+- All character animations is controlled by on useEffect inside dedicated component RiveBear
+- Each time `CharacterState` is updated the characted will play corresponding animation
 
-1. Install dependencies
+## Audio Recording and playing
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- For the recording and playing audio I used `expo-av` library (`expo-audio` does not provide `metering` value so I decided to use depricated lib - `expo-av`)
+- The main purpose was to start the record from the start of the application to track microphone usage, then write the timestamp for the start speaking if mircophone threshold was exceeded (user said something). At the same time I updated `record` object's `progressUpdateIntervalMillis` value from 100ms to 1 second. This value means the time how often `onRecordingStatusUpdate` event is triggered and how often I updated `metering` value to track microphone threshold. So when user said something and the bear is started to listen him, it automatically stopped the recording when `metering` value will be lower then threshold after ~1 second of silence
+- For the playing the audio I used the same library to play recorded file from start speaking timestamp (+ 500ms before to avoid the cutting of the start of the speach), then unload recorded file and start over
+- For pitch up the audio I slightly sped up the audio file
